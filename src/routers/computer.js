@@ -1,6 +1,7 @@
 const express = require('express')
 const router = new express.Router()
 const Computer = require('../models/computer')
+const Sequelize = require('sequelize')
 
 router.post('/computers', async (req, res) => {
     try {
@@ -13,8 +14,38 @@ router.post('/computers', async (req, res) => {
 })
 
 router.get('/computers', async (req, res) => {
+    const queryOptions = [
+        'manufacturer',
+        'model',
+        'cpu',
+        'ram',
+        'disk',
+        'price',
+    ]
+
+    const match = {}
+
+    const { gt, lte } = Sequelize.Op
+
+    queryOptions.forEach((option) => {
+        if (req.body[option]) {
+            if (option === 'ram' || option === 'disk' || option === 'price') {
+                match[option] = {
+                    [gt]: req.body[option]['gt'],
+                    [lte]: req.body[option]['lte'],
+                }
+            } else {
+                match[option] = req.body[option]
+            }
+        }
+    })
+
     try {
-        const computers = await Computer.findAll()
+        const computers = await Computer.findAll({
+            where: {
+                ...match,
+            },
+        })
 
         res.send(computers)
     } catch (error) {
