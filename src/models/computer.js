@@ -22,11 +22,11 @@ const Computer = sequelize.define('computer', {
         type: DataTypes.INTEGER,
     },
     disk: {
-        Type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
     },
-    // price: {
-    //     Type: DataTypes.INTEGER,
-    // },
+    price: {
+        type: DataTypes.INTEGER,
+    },
 })
 
 module.exports = Computer

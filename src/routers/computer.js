@@ -22,4 +22,8 @@ router.get('/computers', async (req, res) => {
     }
 })
 
+router.get('/', async (req, res) => {
+    res.redirect('computers')
+})
+
 module.exports = router
